@@ -16,16 +16,17 @@ import { Status } from '../pacman-status'
 import * as mc from '../pacman-mc'
 
 let board = [
-  [new types.Void(), new types.Void(), new types.Wall()],
-  [new types.Wall(), new types.Wall(), new types.Wall()],
-  [new types.Void(), new types.Void(), new types.Wall()],
-  [new types.Ghost(), new types.Wall(), new types.Candy()]
+  [new types.Void(), new types.Wall(), new types.Wall(), new types.Void()],
+  [new types.Wall(), new types.Void(), new types.Wall(), new types.Wall()],
+  [new types.Void(), new types.Void(), new types.Void(), new types.Wall()],
+  [new types.Void(), new types.Void(), new types.Void(), new types.Wall()],
+  [new types.Ghost(), new types.Wall(), new types.Candy(), new types.Wall()]
 ]
 
-let mcShape = mc.RIGHT
-let candyShape = '<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="15" r="5" fill="yellow"/></svg>'
-let voidShape = '<svg width="30" height="30" xmlns="http://www.w3.org/2000/svg"></svg>'
-let ghostShape =
+const mcShape = mc.RIGHT
+const candyShape = '<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="15" r="5" fill="yellow"/></svg>'
+const voidShape = '<svg width="30" height="30" xmlns="http://www.w3.org/2000/svg"></svg>'
+const ghostShape =
   `<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
     <text x="15" y="15" font-family="Verdana" text-anchor="middle" alignment-baseline="middle" font-size="15">&#x1f47b;</text></svg>`
 
@@ -38,19 +39,19 @@ export default {
   },
   methods: {
     show (item, x, y) {
-      let position = {
+      const position = {
         src: [x, y],
         y (offset) {
-          let offsetX = offset.x || 0
-          let compareX = y
-          let translatedX = compareX + offsetX
+          const offsetX = offset.x || 0
+          const compareX = y
+          const translatedX = compareX + offsetX
           return translatedX
         },
         x (offset) {
-          let offsetY = offset.y || 0
-          let compareY = 3 - x
-          let tranlatedY = compareY + offsetY
-          return 3 - tranlatedY
+          const offsetY = offset.y || 0
+          const compareY = board.length - x
+          const tranlatedY = compareY + offsetY
+          return board.length - tranlatedY
         }
       }
       console.log([x, y], [position.x({}), position.y({})], item instanceof types.Wall)
