@@ -35,36 +35,32 @@ function getSvg (board, position) {
   return load(result[0])
 }
 
-const hasTop = (board, position) => { // looks like left, actually bottom
-  let x = position[0]
-  let y = position[1]
-  let spotX = 3 - (y + 1)
-  let spotY = x
-  return (spotX in board) && (board[spotX][spotY] instanceof types.Wall)
+const hasTop = (board, position) => {
+  let spotX = position.x({y: 1})
+  let spotY = position.y({y: 1})
+  console.log('top', 'on', position.src, 'test', [spotX, spotY])
+  return (spotX in board) && (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
 }
 
-const hasRight = (board, position) => { // looks like right, actually top
-  let x = position[0]
-  let y = position[1]
-  let spotX = 3 - y
-  let spotY = x + 1
-  return (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
+const hasRight = (board, position) => {
+  let spotX = position.x({x: 1})
+  let spotY = position.y({x: 1})
+  console.log('right', 'on', position.src, 'test', [spotX, spotY])
+  return (spotX in board) && (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
 }
 
-const hasBottom = (board, position) => { // looks like top, actually left
-  let x = position[0]
-  let y = position[1]
-  let spotX = 3 - (y - 1)
-  let spotY = x
-  return (spotX in board) && (board[spotX][spotY] instanceof types.Wall)
+const hasBottom = (board, position) => {
+  let spotX = position.x({y: -1})
+  let spotY = position.y({y: -1})
+  console.log('bottom', 'on', position.src, 'test', [spotX, spotY])
+  return (spotX in board) && (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
 }
 
-const hasLeft = (board, position) => { // looks like bottom, actually right
-  let x = position[0]
-  let y = position[1]
-  let spotX = 3 - y
-  let spotY = x - 1
-  return (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
+const hasLeft = (board, position) => {
+  let spotX = position.x({x: -1})
+  let spotY = position.y({x: -1})
+  console.log('left', 'on', position.src, 'test', [spotX, spotY])
+  return (spotX in board) && (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
 }
 
 const enumHasLeft = '─ ┼ ┘ ┐ ┬ ┴ ┤ ╴'.split(' ')

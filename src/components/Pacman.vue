@@ -38,8 +38,22 @@ export default {
   },
   methods: {
     show (item, x, y) {
-      let position = [y, 3 - x]
-      console.log(position, item instanceof types.Wall)
+      let position = {
+        src: [x, y],
+        y (offset) {
+          let offsetX = offset.x || 0
+          let compareX = y
+          let translatedX = compareX + offsetX
+          return translatedX
+        },
+        x (offset) {
+          let offsetY = offset.y || 0
+          let compareY = 3 - x
+          let tranlatedY = compareY + offsetY
+          return 3 - tranlatedY
+        }
+      }
+      console.log([x, y], [position.x({}), position.y({})], item instanceof types.Wall)
       if (item instanceof types.Candy) {
         return candyShape
       }
