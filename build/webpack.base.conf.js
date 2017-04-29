@@ -11,6 +11,7 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  devtool: ['source-map'],
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
