@@ -16,13 +16,13 @@ class Status {
     if (newBoard[position[0]][position[1]] instanceof types.Candy) {
       newScore += 1
       newBoard[position[0]][position[1]] = new types.Void() // 站的位置始终是void
-      return new Status(newBoard, position, newScore)
+      return new Status(newBoard, [].slice.call(position), newScore)
     }
     if (newBoard[position[0]][position[1]] instanceof types.Void) {
-      return new Status(newBoard, position, newScore)
+      return new Status(newBoard, [].slice.call(position), newScore)
     }
     if (newBoard[position[0]][position[1]] instanceof types.Wall) {
-      return new errors.Conflict()
+      throw new errors.Conflict()
     }
   }
 }

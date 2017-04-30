@@ -1,5 +1,6 @@
 <template>
     <div>
+      score {{status.score}}
         <table>
             <tr v-for="(col, x) in status.board"><td v-for="(item, y) in col" v-html="show(item, x, y)" :alt="y + ',' + (3 - x)"></td></tr>
         </table>
@@ -14,10 +15,11 @@ import * as types from '../pacman-types'
 import { getSvg } from '../pacman-wall-painter'
 import { Status } from '../pacman-status'
 import * as mc from '../pacman-mc'
+import { translate } from '../pacman-position-translator'
 
 let board = [
   [new types.Void(), new types.Wall(), new types.Wall(), new types.Void()],
-  [new types.Wall(), new types.Void(), new types.Wall(), new types.Wall()],
+  [new types.Candy(), new types.Void(), new types.Wall(), new types.Wall()],
   [new types.Void(), new types.Void(), new types.Void(), new types.Wall()],
   [new types.Void(), new types.Void(), new types.Void(), new types.Wall()],
   [new types.Ghost(), new types.Wall(), new types.Candy(), new types.Wall()]
@@ -31,30 +33,50 @@ const ghostShape =
     <text x="15" y="15" font-family="Verdana" text-anchor="middle" alignment-baseline="middle" font-size="15">&#x1f47b;</text></svg>`
 
 export default {
+  mounted () {
+    addEventListener('keyup', (evt) => {
+      switch (evt.keyCode) {
+        case 38:
+          this.mcShape = mc.TOP
+          return this.up()
+        case 40:
+          this.mcShape = mc.BOTTOM
+          return this.down()
+        case 37:
+          this.mcShape = mc.LEFT
+          return this.left()
+        case 39:
+          this.mcShape = mc.RIGHT
+          return this.right()
+      }
+    })
+  },
   name: 'pacman',
   data () {
     return {
-      status: new Status(board)
+      status: new Status(board),
+      mcShape
     }
   },
   methods: {
+    left () {
+      const translator = translate(...this.status.pacman_position, board.length)
+      this.status = this.status.moveTo([translator.x({x: -1}), translator.y({x: -1})])
+    },
+    right () {
+      const translator = translate(...this.status.pacman_position, board.length)
+      this.status = this.status.moveTo([translator.x({x: 1}), translator.y({x: 1})])
+    },
+    up () {
+      const translator = translate(...this.status.pacman_position, board.length)
+      this.status = this.status.moveTo([translator.x({y: 1}), translator.y({y: 1})])
+    },
+    down () {
+      const translator = translate(...this.status.pacman_position, board.length)
+      this.status = this.status.moveTo([translator.x({y: -1}), translator.y({y: -1})])
+    },
     show (item, x, y) {
-      const position = {
-        src: [x, y],
-        y (offset) {
-          const offsetX = offset.x || 0
-          const compareX = y
-          const translatedX = compareX + offsetX
-          return translatedX
-        },
-        x (offset) {
-          const offsetY = offset.y || 0
-          const compareY = board.length - x
-          const tranlatedY = compareY + offsetY
-          return board.length - tranlatedY
-        }
-      }
-      console.log([x, y], [position.x({}), position.y({})], item instanceof types.Wall)
+      const position = translate(x, y, board.length)
       if (item instanceof types.Candy) {
         return candyShape
       }
@@ -66,7 +88,7 @@ export default {
         if (svg) return svg
       }
       if (this.status.pacman_position[0] === x && this.status.pacman_position[1] === y) {
-        return mcShape
+        return this.mcShape
       } else {
         return voidShape
       }

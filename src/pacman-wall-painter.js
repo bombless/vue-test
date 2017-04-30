@@ -8,58 +8,44 @@ function getSvg (board, position) {
   let minusSets = []
   if (!hasLeft(board, position)) {
     minusSets.push(enumHasLeft)
-  } else {
-    console.log('hasLeft')
   }
   if (!hasRight(board, position)) {
     minusSets.push(enumHasRight)
-  } else {
-    console.log('hasRight')
   }
   if (!hasTop(board, position)) {
     minusSets.push(enumHasTop)
-  } else {
-    console.log('hasTop')
   }
   if (!hasBottom(board, position)) {
     minusSets.push(enumHasBottom)
-  } else {
-    console.log('hasBottom')
   }
-  console.log(minusSets)
   let result = [].slice.apply(fullList)
   for (let minus of minusSets) {
     result = setMinus(result, minus)
   }
-  console.log('result', result)
   return load(result[0])
 }
 
 const hasTop = (board, position) => {
   let spotX = position.x({y: 1})
   let spotY = position.y({y: 1})
-  console.log('top', 'on', position.src, 'test', [spotX, spotY])
   return (spotX in board) && (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
 }
 
 const hasRight = (board, position) => {
   let spotX = position.x({x: 1})
   let spotY = position.y({x: 1})
-  console.log('right', 'on', position.src, 'test', [spotX, spotY])
   return (spotX in board) && (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
 }
 
 const hasBottom = (board, position) => {
   let spotX = position.x({y: -1})
   let spotY = position.y({y: -1})
-  console.log('bottom', 'on', position.src, 'test', [spotX, spotY])
   return (spotX in board) && (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
 }
 
 const hasLeft = (board, position) => {
   let spotX = position.x({x: -1})
   let spotY = position.y({x: -1})
-  console.log('left', 'on', position.src, 'test', [spotX, spotY])
   return (spotX in board) && (spotY in board[spotX]) && (board[spotX][spotY] instanceof types.Wall)
 }
 
